@@ -1,7 +1,13 @@
 library(data.table)
 
+# Part 1: reading the data files
+
 features = read.table("features.txt")
 activity_label = read.table("activity_labels.txt")
+
+# reading the test and train data
+# Using the activity_labels data to name the activities
+# Using the features data to name the feature
 
 test_data= read.table("test/X_test.txt")
 names(test_data)= features[,2]
@@ -24,16 +30,22 @@ train_whole=cbind(as.data.frame(train_sub), train_label, train_data)
 
 combine_data = rbind(test_whole, train_whole)
 
+# Part 2: data transformation
+
+# only choose the variables that are mean or std
 feature_chosen = grepl("mean\\(\\)|std\\(\\)",features[,2])
 features_selected = features[feature_chosen,2]
 selectcolumns = c("Subject", "Activity_Label", as.character(features_selected))
 data = subset(combine_data, select = selectcolumns)
 
+# rename variables
 names(data) = gsub("^t", "time", names(data))
 names(data) = gsub("^f", "freq", names(data))
 names(data)<-gsub("Acc", "Accelerometer", names(data))
 names(data)<-gsub("Gyro", "Gyroscope", names(data))
 names(data)<-gsub("Mag", "Magnitude", names(data))
+
+# Part 3: Produce the final tidy data set
 
 final_data = aggregate(.~Subject + Activity_Label, data, mean)
 
