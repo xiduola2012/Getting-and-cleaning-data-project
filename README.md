@@ -1,6 +1,6 @@
 # Getting-and-cleaning-data-project
 
-This code can be divided into four parts:
+This code can be divided into three parts:
 
 Part 1: read the data files
 In this part, we read the files useful for this project, including 
